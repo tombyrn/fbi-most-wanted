@@ -1,5 +1,7 @@
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return <main className="m-0 p-0 flex flex-row flex-wrap justify-around items-center">
-        {children}
-    </main>
+    return (
+        <div className="relative m-0 p-5 w-screen h-screen flex flex-col border-2 border-black overflow-auto">
+            {children}
+        </div>
+        )
 }

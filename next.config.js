@@ -2,8 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['www.fbi.gov']
-  }
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.fbi.gov',
+        port: '',
+        pathname: '**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

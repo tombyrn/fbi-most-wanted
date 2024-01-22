@@ -1,21 +1,36 @@
-import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react"
-import PosterCarousel from "./PosterCarousel"
+import { Button, Card, CardBody, CardHeader, Typography } from "@material-tailwind/react"
+import PosterCarousel from "@/components/PosterCarousel"
+import { useRouter } from "next/router";
+import Link from "next/link";
+
+function stripHtml(htmlString: string) {
+    if(!htmlString) return undefined;
+    var doc = new DOMParser().parseFromString(htmlString, 'text/html');
+    return doc.body.textContent || "";
+}
 
 export default function Poster({ data }: { data: any }) {
+    const router = useRouter();
+    
     return data ?  
-    <Card placeholder="loading" className="w-96 h-48 m-2 p-5 flex-row justify-start items-stretch border border-blue-500">
-        <CardHeader placeholder="loading" className="m-0 p-0 relative w-1/2 h-full border border-red-500">
-            <PosterCarousel data={data.images}/>
-        </CardHeader>
+    <div className="w-full h-1/3 flex justify-center m-2 ">
 
-        <CardBody placeholder="loading" className="ml-2 p-0 w-fit h-full overflow-auto border border-green-500">
-            <Typography placeholder="loading">TITLE: {data.title}</Typography>
-            <Typography placeholder="loading">ALIASES: {data.aliases && data.aliases.map((alias: string) => <Typography placeholder="loading" key={alias}>{alias + ', '}</Typography>)} </Typography>
-            <Typography placeholder="loading">DESCRIPTION: {data.description}</Typography>
-            {/* <Typography placeholder="loading">CAUTION: {data.caution}</Typography> */}
-            <Typography placeholder="loading">WARNING: {data.warning_message}</Typography>
-            <Typography placeholder="loading">REWARD: {data.reward_text}</Typography>
-        </CardBody>
+        <Card placeholder="loading" className="w-1/2 h-full p-5 flex-row justify-start items-stretch border-2 border-blue-500">
+            <CardHeader placeholder="loading" className="m-0 p-5 w-1/3 h-full ">
+                <PosterCarousel data={data.images}/>
+            </CardHeader>
 
-    </Card> : <></>
+            <div className="ml-2 p-2 flex flex-col w-full h-full">
+                <CardBody placeholder="loading" className="w-full h-full overflow-auto rounded-xl border border-blue-500">
+                    <Typography variant="h5" placeholder="loading" className="text-center pb-4">{data.title || "N/A"}</Typography>
+                    <Typography variant="small" placeholder="loading" className=" pb-2">{stripHtml(data.details) || stripHtml(data.description) || data.hair_raw || "N/A"}</Typography>
+                    <Typography variant="h6" placeholder="loading" className=" pb-2">{stripHtml(data.caution) || data.scars_and_marks || data.weight || "N/A"}</Typography>
+                    <Typography variant="small" placeholder="loading" className=" pb-4">{data.reward_text || data.additional_information || data.warning_message ||  data.height_max || data.sex || "N/A"}</Typography>
+                    <Link href={data.url} rel="noopener noreferrer" target="_blank" className="flex justify-center"> Visit Page </Link>
+                </CardBody>
+
+                {/* <Button className="mt-2 h-1/12" placeholder="loading" onClick={() => {router.push(data.url)}}>visit page</Button> */}
+            </div>
+        </Card>
+    </div> : <></>
 }
